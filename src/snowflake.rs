@@ -40,19 +40,6 @@ impl Snowflake {
         }
     }
 
-    fn get_next_mill(&self) -> i64 {
-        let mut mill = self.get_new_stmp();
-        while mill <= self.last_stmp {
-            mill = self.get_new_stmp();
-        }
-        mill
-    }
-
-    #[inline]
-    fn get_new_stmp(&self) -> i64 {
-        chrono::offset::Local::now().timestamp_millis()
-    }
-
     pub fn next_id(&mut self) -> i64 {
         let mut curr_stmp = self.get_new_stmp();
         if curr_stmp < self.last_stmp {
@@ -75,5 +62,18 @@ impl Snowflake {
             | self.data_center_id << DATACENTER_LEFT
             | self.machine_id << MACHINE_LEFT
             | self.sequence
+    }
+
+    fn get_next_mill(&self) -> i64 {
+        let mut mill = self.get_new_stmp();
+        while mill <= self.last_stmp {
+            mill = self.get_new_stmp();
+        }
+        mill
+    }
+
+    #[inline]
+    fn get_new_stmp(&self) -> i64 {
+        chrono::offset::Local::now().timestamp_millis()
     }
 }
